@@ -1,0 +1,146 @@
+.layout {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  font-family: 'Playfair Display', serif;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  background: #0f2e28;
+  padding: 30px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  justify-content: flex-start !important;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-left: 20px;
+  margin-top: 20px;
+  border-radius: 10px;
+
+}
+
+.logo-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 8px;
+  background: #c9942f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  color: #3a2705;
+  font-size: 40px;
+}
+
+.logo-text {
+  color: #f2ece0;
+  font-size: 30px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.logo-text span {
+  color: #c9942f;
+}
+
+nav {
+  display: flex;
+  flex-direction: column;
+  gap: 30px;
+  justify-content: flex-start;
+  margin-left: 20px;
+  margin-top: 40px;
+}
+
+nav a {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 9px 10px;
+  border-radius: 3px;
+  color: #cfd6d1;
+  font-size: 18px;
+  text-decoration: none;
+  font-family: 'Playfair Display', serif;
+  transition: background 0.15s ease;
+  white-space: nowrap;
+}
+
+nav a i {
+  font-size: 28px;
+  flex-shrink: 0 !important;
+}
+
+nav a:hover {
+  background: #173a33;
+  color: #fbfbff;
+  border-radius: 9px;
+}
+
+nav a.activo {
+  background: #173a33;
+  color: #f2ece0;
+}
+
+nav a.activo i {
+  color: #c9942f;
+}
+
+.usuario {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 0.5px solid #1e463e;
+}
+
+.avatar {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #c9942f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 25px;
+  color: #3a2705;
+  font-family: Arial, sans-serif;
+  font-weight: 500;
+}
+
+.usuario span {
+  font-family: 'Playfair Display', serif;
+  font-size: 25px;
+  color: #f2ece0;
+  flex: 1;
+}
+
+.btn-salir {
+  background: transparent;
+  border: none;
+  color: #cfd6d1;
+  cursor: pointer;
+  font-size: 40px;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.btn-salir:hover {
+  color: #f2ece0;
+  background: #173a33;
+}
+
+/* Contenido */
+.contenido {
+  flex: 1;
+  background: #15181a;
+  padding: 45px 28px;
+}

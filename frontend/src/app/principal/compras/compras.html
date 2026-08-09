@@ -1,0 +1,388 @@
+<div class="compras-page">
+
+  <div class="header-compras">
+    <div>
+      <h2 class="titulo">Registro de Compras</h2>
+      <p class="page-sub">
+        Registrar todas tus compras además de poder visualizar el estado de tus compras anteriores.
+      </p>
+    </div>
+
+    <button
+      *ngIf="rolUsuario === 'ADMINISTRADOR' || rolUsuario === 'PAREJA'"
+      class="btn-primario"
+      (click)="abrirModal()">
+
+      <i class="pi pi-plus"></i>
+      Registrar Nueva Compra
+
+    </button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard">
+
+    <div class="tarjeta">
+      <span class="tarjeta-titulo">Compras pendientes</span>
+      <span class="tarjeta-valor">{{pendientes}}</span>
+    </div>
+
+    <div class="tarjeta tarjeta-alerta">
+      <span class="tarjeta-titulo">Compras Rechazadas</span>
+      <span class="tarjeta-valor">{{rechazadas}}</span>
+    </div>
+
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+
+    <div class="filter-field"
+         *ngIf="rolUsuario === 'ADMINISTRADOR' || rolUsuario === 'SUPERVISOR'">
+
+      <label>Titular</label>
+
+      <select [(ngModel)]="cliente"
+              name="cliente"
+              (change)="filtrar()">
+
+        <option value="">Todos</option>
+
+        <option *ngFor="let c of clientesFiltrar"
+                [value]="c.primerNombre">
+          {{ c.primerNombre }} {{ c.primerApellido }}
+        </option>
+
+      </select>
+
+    </div>
+
+    <div class="filter-field">
+      <label>Almacén</label>
+      <select [(ngModel)]="almacen" name="almacen" (ngModelChange)="filtrar()">
+        <option value="">Todos</option>
+        <option *ngFor="let a of almacenesFiltrar" [value]="a.nombre">
+          {{ a.nombre }}
+        </option>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label>Estado</label>
+      <select [(ngModel)]="estado" name="estado" (ngModelChange)="filtrar()">
+        <option value="">Todos</option>
+        <option>APROBADO</option>
+        <option>RECHAZADO</option>
+        <option>PENDIENTE</option>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label>Desde</label>
+      <input type="date"
+             [(ngModel)]="fechaDesde"
+             name="fechaDesde" (ngModelChange)="filtrar()">
+    </div>
+
+    <div class="filter-field">
+      <label>Hasta</label>
+      <input type="date"
+             [(ngModel)]="fechaHasta"
+             name="fechaHasta" (ngModelChange)="filtrar()">
+    </div>
+
+    <button class="filter-clear">
+      Limpiar filtros
+    </button>
+
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-card">
+
+    <table>
+
+      <thead>
+      <tr>
+        <th *ngIf="rolUsuario === 'ADMINISTRADOR' || rolUsuario === 'SUPERVISOR'">
+          Titular
+        </th>
+
+        <th *ngIf="rolUsuario === 'ADMINISTRADOR' || rolUsuario === 'CLIENTE'">
+          Pareja
+        </th>
+        <th>Fecha / Hora</th>
+        <th>Almacén</th>
+        <th>Monto</th>
+        <th>Estado</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr *ngFor="let compra of compras">
+
+        <td *ngIf="rolUsuario === 'ADMINISTRADOR' || rolUsuario === 'SUPERVISOR'">
+          {{ obtenerCliente(obtenerPareja(compra.idPareja)?.idCliente!)?.primerNombre }}
+          {{ obtenerCliente(obtenerPareja(compra.idPareja)?.idCliente!)?.primerApellido }}
+        </td>
+
+        <td *ngIf="rolUsuario === 'ADMINISTRADOR' || rolUsuario === 'CLIENTE'">
+          {{ obtenerPareja(compra.idPareja)?.primerNombre }}
+          {{ obtenerPareja(compra.idPareja)?.primerApellido }}
+        </td>
+
+        <td>
+          {{ compra.fecha }}
+          <div>{{ compra.hora }}</div>
+        </td>
+
+        <td>
+          {{ obtenerAlmacen(compra.idAlmacen)?.nombre }}
+        </td>
+
+        <td>
+          {{ compra.montoTransaccion | currency:'COP':'symbol':'1.0-0' }}
+        </td>
+
+        <td>
+          {{compra.estado}}
+        </td>
+        <td class="col-acciones">
+          <button class="btn-icono" title="Editar" (click)="editar(compra)">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+          <button class="btn-icono btn-icono-peligro" title="Eliminar" (click)="eliminar(compra)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+
+      </tr>
+
+      <tr *ngIf="!cargando && compras.length === 0">
+        <td colspan="6" style="text-align:center;">
+          No hay compras registradas.
+        </td>
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModal"
+  (click)="cerrarModal()">
+  <div
+    class="modal"
+    (click)="$event.stopPropagation()">
+
+    <h3>{{modoEdicion ? 'Editar Compra' : 'Registrar Nueva Compra'}}</h3>
+
+    <form (ngSubmit)="onRegistrarCompra()">
+
+
+        <div *ngIf="rolUsuario === 'ADMINISTRADOR'">
+
+        <select name = "idPareja" [(ngModel)]="compra.idPareja">
+          <option [value]="0" disabled>Selecciona una pareja</option>
+          <option *ngFor="let p of parejas" [value]="p.id">
+            {{ nombrePareja(p) }}
+          </option>
+        </select>
+
+        </div>
+
+      <div>
+
+        <label>Almacén</label>
+
+        <select
+          name="idAlmacen"
+          [(ngModel)]="compra.idAlmacen">
+
+          <option [value]="0" disabled>
+            Seleccione un almacén
+          </option>
+
+          <option *ngFor="let alm of almacenes" [value]="alm.id">
+            {{ alm.nombre }} — {{ alm.barrio }}, {{ alm.ciudad }}
+          </option>
+
+        </select>
+
+      </div>
+
+      <div>
+
+        <label>Monto de la Transacción</label>
+
+        <input
+          type="number"
+          placeholder="0"
+          name = "montoTransaccion"
+          [(ngModel)]="compra.montoTransaccion">
+
+      </div>
+
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+      <div class="modal-botones">
+
+        <button
+          type="button"
+          class="cancelar"
+          (click) = "cerrarModal()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primario">
+          {{ modoEdicion ? 'Actualizar' : 'Guardar'}}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- Modal confirmar eliminación -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModalEliminar"
+  (click)="cerrarModalEliminar()">
+
+  <div
+    class="modal modal-confirmacion"
+    (click)="$event.stopPropagation()">
+
+    <h3>Eliminar cliente</h3>
+
+    <p class="texto-confirmacion">
+      ¿Seguro que quieres eliminar esta compra?
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="modal-botones">
+
+      <button type="button" class="cancelarr" (click)="cerrarModalEliminar()">
+        Cancelar
+      </button>
+
+      <button type="button" class="btn-peligro" (click)="confirmarEliminar()">
+        Eliminar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+<!-- Modal cambiar contraseña pareja -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModalContrasena">
+
+  <div
+    class="modal modal-confirmacion"
+    (click)="$event.stopPropagation()">
+
+    <form (ngSubmit)="cambiarContra()">
+
+      <h3>¡Bienvenido(a) {{ parejaLista?.primerNombre }} {{ parejaLista?.primerApellido }}!</h3>
+
+      <p class="texto-confirmacion">
+        Es un gusto para nosotros darte la bienvenida.
+      </p>
+
+      <p class="texto-confirmacion">
+        Por ser tu primer ingreso a nuestra plataforma,
+        necesitamos que cambies tu contraseña.
+      </p>
+
+      <div class="campo">
+
+        <label for="contrasenia">Nueva contraseña</label>
+
+        <input
+          id="contrasenia"
+          type="password"
+          name="contrasenia"
+          [(ngModel)]="nuevaContrasena">
+
+      </div>
+
+      <div class="campo">
+
+        <label for="confirmPassword">Confirmar contraseña</label>
+
+        <input
+          id="confirmPassword"
+          type="password"
+          name="confirmPassword"
+          [(ngModel)]="confirmPassword">
+
+      </div>
+
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+      <div class="modal-botones">
+        <button type="submit" class="btn-primario">
+          Aceptar
+        </button>
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!--
+<div class="modal-overlay">
+
+  <div class="modal modal-confirmacion">
+
+    <h3>Solicitud de Sobrecupo</h3>
+
+    <p class="texto-confirmacion">
+      El monto de la compra supera el cupo permitido.
+      <br><br>
+      ¿Deseas solicitar un sobrecupo para realizar esta compra?
+    </p>
+
+    <div class="modal-botones">
+
+      <button
+        type="button"
+        class="cancelar">
+        Cancelar
+      </button>
+
+      <button
+        type="button"
+        class="btn-primario">
+        Solicitar Sobrecupo
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+-->

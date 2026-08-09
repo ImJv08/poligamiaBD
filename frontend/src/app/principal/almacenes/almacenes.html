@@ -1,0 +1,192 @@
+<div class="page-header">
+  <h1>Almacenes</h1>
+
+  <button class="btn btn-primary" (click) = "abrirModal()">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4">
+      <path d="M12 5v14M5 12h14"/>
+    </svg>
+    Registrar almacén
+  </button>
+</div>
+
+<section class="stats-grid">
+
+  <div class="stat-card">
+    <div class="stat-label">Almacenes registrados</div>
+    <div class="stat-value">{{almacenesRegistrados}}</div>
+  </div>
+
+  <div class="stat-card">
+    <div class="stat-label">Ciudades cubiertas</div>
+    <div class="stat-value">{{ciudadesRegistrados}}</div>
+  </div>
+
+</section>
+
+<section class="table-card">
+
+  <div class="table-toolbar">
+    <div class="search-box">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="11" cy="11" r="7"/>
+        <path d="m21 21-4.3-4.3"/>
+      </svg>
+
+      <input
+        type="text"
+        placeholder="Buscar por nombre, barrio o ciudad..."
+        [(ngModel)]="filtro"
+        (input)="filtrarAlmacenes()">
+    </div>
+  </div>
+
+  <table>
+
+    <thead>
+    <tr>
+      <th>Almacén</th>
+      <th>Dirección</th>
+      <th>Barrio</th>
+      <th>Ciudad</th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr *ngFor="let almacen of almacenes">
+      <td>
+        <div class="cell-name">
+          {{ almacen.nombre }}
+        </div>
+      </td>
+      <td>{{ almacen.direccion }}</td>
+      <td>{{ almacen.barrio }}</td>
+      <td>{{ almacen.ciudad }}</td>
+      <td class="col-acciones">
+        <button
+          class="btn-icono"
+          title="Editar"
+          (click)="editar(almacen)">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+
+        <button
+          class="btn-icono btn-icono-peligro"
+          title="Eliminar"
+          (click) = "eliminar(almacen)">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+
+    <tr *ngIf="!cargando && almacenes.length === 0">
+      <td colspan="4" style="text-align: center;">
+        No hay almacenes registrados.
+      </td>
+    </tr>
+
+    </tbody>
+
+  </table>
+
+</section>
+
+<!-- Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModal"
+  (click)="cerrarModal()">
+
+  <div
+    class="modal"
+    (click)="$event.stopPropagation()">
+
+    <h3>{{ modoEdicion ? 'Editar almacen' : 'Registrar almacen' }}</h3>
+
+    <form (ngSubmit)="onCrear()">
+
+      <label> Nombre </label>
+        <input
+          type = "text"
+          placeholder= "Nombre Almacen"
+          name = "nombreAlmacen"
+          [(ngModel)]="almacen.nombre">
+
+      <label> Direccion </label>
+      <input
+        id="direccion"
+        type="text"
+        name="direccion"
+        placeholder="Ej: Cra 7 #22-14"
+        [(ngModel)]="almacen.direccion"
+        maxlength="100"
+        autocomplete="street-address"
+        required>
+
+      <label> Barrio </label>
+      <input
+        type="text"
+        placeholder="Barrio Almacen"
+        name = "barrioAlmacen"
+        [(ngModel)]="almacen.barrio">
+
+      <label> Ciudad </label>
+      <input
+        type="text"
+        placeholder = "Ciudad del Almacen"
+        name = "ciudadAlmacen"
+        [(ngModel)]="almacen.ciudad">
+
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+      <div class="modal-botones">
+
+        <button
+          type="button"
+          class="cancelar"
+          (click)="cerrarModal()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primario">
+          {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModalEliminar"
+  (click)="cerrarModalEliminar()">
+
+  <div class="modal modal-confirmacion" (click)="$event.stopPropagation()">
+
+    <h3>Eliminar almacén</h3>
+
+    <p class="texto-confirmacion">
+      ¿Seguro que quieres eliminar el almacén
+      <strong>{{ almacenAEliminar?.nombre }}</strong>?
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="modal-botones">
+      <button type="button" class="cancelar" (click)="cerrarModalEliminar()">Cancelar</button>
+      <button type="button" class="btn-peligro" (click)="confirmarEliminar()">Eliminar</button>
+    </div>
+
+  </div>
+
+</div>
+
+

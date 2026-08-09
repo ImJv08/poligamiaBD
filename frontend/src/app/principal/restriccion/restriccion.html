@@ -1,0 +1,182 @@
+<div class="header-clientes">
+
+  <div>
+    <h2>Restricciones de Compra</h2>
+
+    <p class="subtitulo">
+      Define reglas para bloquear compras de parejas en horarios específicos.
+      Selecciona primero al cliente titular para ver sus parejas asociadas.
+    </p>
+  </div>
+
+</div>
+
+<div class="tarjetas">
+
+  <div class="tarjeta">
+    <p class="tarjeta-label">Restricciones activas</p>
+    <p class="tarjeta-valor">{{restriccionesActivas}}</p>
+  </div>
+
+  <div class="tarjeta">
+    <p class="tarjeta-label">Parejas con restricción</p>
+    <p class="tarjeta-valor">{{parejasRestringidas}}</p>
+  </div>
+
+</div>
+
+<div class="fila-boton">
+
+  <button
+    *ngIf="rolUsuario === 'ADMINISTRADOR' || rolUsuario === 'CLIENTE'"
+    class="btn-primario"
+    (click)="abrirModal()">
+
+    <i class="pi pi-plus"></i>
+    Nueva restricción
+
+  </button>
+
+</div>
+
+<div class="tabla-contenedor">
+  <table>
+    <thead>
+    <tr>
+      <th>Cliente Titular</th>
+      <th>Pareja</th>
+      <th>Fecha</th>
+      <th>Horario bloqueado</th>
+      <th>Estado</th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let r of restricciones">
+      <td class="cell-client">
+        {{ obtenerCliente(obtenerPareja(r.parejaId)?.idCliente ?? 0)?.primerNombre }}
+        {{ obtenerCliente(obtenerPareja(r.parejaId)?.idCliente ?? 0)?.primerApellido }}
+      </td>
+      <td class="cell-name">
+        {{ obtenerPareja(r.parejaId)?.primerNombre }}
+        {{ obtenerPareja(r.parejaId)?.primerApellido }}
+      </td>
+      <td>{{ r.fecha | date:'dd/MM/yyyy' }}</td>
+      <td>{{ r.horaInicio }} – {{ r.horaFin }}</td>
+      <td>
+    <span class="badge" [ngClass]="r.activa ? 'badge-activo' : 'badge-suspendido'">
+      {{ r.activa ? 'Activa' : 'Inactiva' }}
+    </span>
+      </td>
+      <td class="col-acciones">
+        <button class="btn-icono" title="Editar" (click)="editar(r)" *ngIf="rolUsuario === 'CLIENTE' || rolUsuario === 'SUPERVISOR' || rolUsuario === 'ADMINISTRADOR'">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+        <button class="btn-icono btn-icono-peligro" title="Eliminar" (click)="eliminar(r)" *ngIf="rolUsuario === 'CLIENTE' || rolUsuario === 'SUPERVISOR' || rolUsuario === 'ADMINISTRADOR'">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+
+    <tr *ngIf="!cargando && restricciones.length === 0">
+      <td colspan="6" style="text-align: center;">No hay restricciones registradas.</td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModal"
+  (click)="cerrarModal()">
+
+  <div
+    class = "modal"
+    (click)="$event.stopPropagation()">
+
+    <h3>{{ modoEdicion ? 'Editar restriccion' : 'Registrar restriccion' }}</h3>
+
+    <form (ngSubmit)="onCrear()">
+
+      <label>Pareja</label>
+      <select name="parejaId" [(ngModel)]="restriccion.parejaId">
+        <option [value]="0" disabled>Seleccione una pareja</option>
+        <option *ngFor="let p of parejas" [value]="p.id">
+          {{ nombrePareja(p) }}
+        </option>
+      </select>
+
+      <label>Fecha</label>
+      <input type="date" name="fecha" [(ngModel)]="restriccion.fecha">
+
+      <label>Hora inicio</label>
+      <input type="time" name="horaInicio" [(ngModel)]="restriccion.horaInicio">
+
+      <label>Hora fin</label>
+      <input type="time" name="horaFin" [(ngModel)]="restriccion.horaFin">
+      <label>Estado</label>
+
+      <div class="switch-container">
+        <span>{{ restriccion.activa ? 'Activa' : 'Inactiva' }}</span>
+
+        <label class="switch">
+          <input
+            type="checkbox"
+            name="activa"
+            [(ngModel)]="restriccion.activa">
+
+          <span class="slider"></span>
+        </label>
+      </div>
+
+      <label>Motivo</label>
+      <input type="text" name="motivo" placeholder="Opcional" [(ngModel)]="restriccion.motivo">
+
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+      <div class="modal-botones">
+        <button type="button" class="cancelar" (click)="cerrarModal()">Cancelar</button>
+        <button type="submit" class="btn-primario">{{ modoEdicion ? 'Actualizar' : 'Guardar'}}</button>
+      </div>
+    </form>
+
+  </div>
+
+</div>
+
+<!-- Modal confirmar eliminación -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModalEliminar"
+  (click)="cerrarModalEliminar()">
+
+  <div
+    class="modal modal-confirmacion"
+    (click)="$event.stopPropagation()">
+
+    <h3>Eliminar restriccion</h3>
+
+    <p class="texto-confirmacion">
+      ¿Seguro que quieres eliminar esta restricción?
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="modal-botones">
+
+      <button type="button" class="cancelarr" (click)="cerrarModalEliminar()">
+        Cancelar
+      </button>
+
+      <button type="button" class="btn-peligro" (click)="confirmarEliminar()">
+        Eliminar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>

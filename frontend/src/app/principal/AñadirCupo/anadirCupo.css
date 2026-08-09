@@ -1,0 +1,150 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: #141E1B !important;
+  width: 480px;
+  padding: 30px;
+  border-radius: 18px;
+  border: 2px solid white;
+  position: relative;
+  z-index: 10000;
+  color: white !important;
+}
+
+.modal h3,
+.modal p,
+.modal label,
+.modal div,
+.modal input {
+  color: white !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.modal input {
+  background: #1A2521 !important;
+  border: 1px solid white !important;
+}
+
+.modal h3{
+  margin:0;
+  font-family:'Fraunces',serif;
+  font-size:28px;
+  color:var(--text);
+}
+
+.modal-sub{
+  margin-top:8px;
+  margin-bottom:24px;
+  color:var(--text-soft);
+  font-size:14px;
+  line-height:1.5;
+}
+
+.campo{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  margin-bottom:18px;
+}
+
+.campo label{
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.08em;
+  color:var(--text-soft);
+  font-weight:600;
+}
+
+.campo select,
+.campo input{
+  width:100%;
+  padding:12px 14px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:var(--card-alt);
+  color:var(--text);
+  font-size:14px;
+  font-family:'IBM Plex Sans',sans-serif;
+  transition:.2s;
+}
+
+.campo input::placeholder{
+  color:var(--text-faint);
+}
+
+.campo select:focus,
+.campo input:focus{
+  outline:none;
+  border-color:var(--brass);
+  box-shadow:0 0 0 3px rgba(201,154,74,.15);
+}
+
+.modal-botones{
+  display:flex;
+  justify-content:flex-end;
+  gap:12px;
+  margin-top:26px;
+}
+
+.btn-secundario{
+  background:transparent;
+  border:1px solid var(--line);
+  color:var(--text);
+  padding:12px 22px;
+  border-radius:10px;
+  cursor:pointer;
+  transition:.2s;
+  font-weight:600;
+}
+
+.btn-secundario:hover{
+  background:var(--card-hover);
+  border-color:var(--line-strong);
+}
+
+.alert{
+  margin-top:10px;
+  padding:12px;
+  border-radius:10px;
+  font-size:14px;
+}
+
+.alert.success{
+  background:rgba(111,191,139,.15);
+  color:var(--emerald);
+}
+
+.alert.error{
+  background:rgba(217,139,174,.15);
+  color:var(--rose);
+}
+
+
+
+.cliente-info {
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 14px;
+  color: var(--text);
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 22px;
+}
+
+
+.campo input {
+  background: #1A2521 !important;
+  color: #EEF1EC !important;
+}
+
+

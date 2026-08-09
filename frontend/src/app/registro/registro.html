@@ -1,0 +1,146 @@
+<div class="registro-page">
+  <div class="registro-card">
+
+    <div class="brand">
+      <div class="logo-mark">N</div>
+      <div class="logo-word">NEXUS <span>Cupos</span></div>
+    </div>
+
+    <div class="form-head">
+      <h1 class="form-title">Crea tu cuenta</h1>
+    </div>
+
+    <form (ngSubmit)="onSignUp()" novalidate>
+
+      <div class="section-label brass">Nombres y apellidos</div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="primerNombre">Primer nombre</label>
+          <input
+            id="primerNombre"
+            name="primerNombre"
+            type="text"
+            placeholder="María"
+            [(ngModel)]="cliente.primerNombre">
+        </div>
+
+        <div class="field">
+          <label for="segundoNombre">Segundo nombre</label>
+          <input
+            id="segundoNombre"
+            name="segundoNombre"
+            type="text"
+            placeholder="Opcional"
+            [(ngModel)]="cliente.segundoNombre">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label for="primerApellido">Primer apellido</label>
+          <input
+            id="primerApellido"
+            name="primerApellido"
+            type="text"
+            placeholder="Rodríguez"
+            [(ngModel)]="cliente.primerApellido">
+        </div>
+
+        <div class="field">
+          <label for="segundoApellido">Segundo apellido</label>
+          <input
+            id="segundoApellido"
+            name="segundoApellido"
+            type="text"
+            placeholder="Opcional"
+            [(ngModel)]="cliente.segundoApellido">
+        </div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-label emerald">Contacto</div>
+
+      <div class="field">
+        <label for="correo">Correo electrónico</label>
+        <input
+          id="correo"
+          name="correo"
+          type="text"
+          placeholder="tucorreo@ejemplo.com"
+          [(ngModel)]="cliente.correoElectronico">
+      </div>
+
+      <div class="field">
+        <label for="numeroDocumento">Número de documento</label>
+        <input
+          id="numeroDocumento"
+          name="numeroDocumento"
+          type="text"
+          placeholder="1020304050"
+          [(ngModel)]="cliente.numeroDocumento">
+      </div>
+
+      <div class="divider"></div>
+
+      <div class="section-label brass">Seguridad</div>
+
+      <div class="field-row">
+
+        <div class="field">
+          <label for="contrasena">Contraseña</label>
+
+          <div class="password-wrap">
+            <input
+              id="contrasena"
+              name="contrasena"
+              type="password"
+              placeholder="Mínimo 6 caracteres"
+              [(ngModel)]="cliente.contrasenia">
+
+            <button type="button" class="toggle-pass" tabindex="-1">
+              Ver
+            </button>
+          </div>
+
+        </div>
+
+        <div class="field">
+          <label for="confirmarContrasena">Confirmar contraseña</label>
+
+          <div class="password-wrap">
+            <input
+              id="confirmarContrasena"
+              name="confirmarContrasena"
+              type="password"
+              placeholder="Repite tu contraseña"
+              [(ngModel)]="confirmPassword">
+
+            <button type="button" class="toggle-pass" tabindex="-1">
+              Ver
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+      <button type="submit" class="btn-submit">
+        Crear cuenta
+      </button>
+
+      <button type="button" class="btn-secondary" (click)="irPrincipal()">
+        Ya tengo cuenta, iniciar sesión
+      </button>
+
+      <p class="help-note">
+        Al registrarte aceptas las políticas de manejo de cupos y compras de NEXUS Cupos.
+      </p>
+
+    </form>
+
+  </div>
+</div>

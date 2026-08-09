@@ -1,0 +1,146 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+}
+
+.modal {
+  background: #141E1B !important;
+  width: 480px;
+  padding: 30px;
+  border-radius: 18px;
+  border: 2px solid white;
+  position: relative;
+  z-index: 10000;
+  color: white !important;
+}
+
+.modal h3,
+.modal p,
+.modal label,
+.modal div,
+.modal input {
+  color: white !important;
+  opacity: 1 !important;
+  filter: none !important;
+}
+
+.modal input {
+  background: #1A2521 !important;
+  border: 1px solid white !important;
+}
+
+.modal h3{
+  margin:0;
+  font-family:'Fraunces',serif;
+  font-size:28px;
+  color:var(--text);
+}
+
+.modal-sub{
+  margin-top:8px;
+  margin-bottom:24px;
+  color:var(--text-soft);
+  font-size:14px;
+  line-height:1.5;
+}
+
+.campo{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  margin-bottom:22px;
+}
+
+.campo input,
+.campo select{
+  width:100%;
+  padding:13px 15px;
+  border-radius:10px;
+  border:1px solid var(--line);
+  background:#1A2521;
+  color:#EEF1EC;
+  font-size:15px;
+  font-family:'IBM Plex Sans',sans-serif;
+}
+
+.campo input:focus,
+.campo select:focus{
+  outline:none;
+  border-color:var(--brass);
+  box-shadow:0 0 0 3px rgba(201,154,74,.15);
+}
+
+.modal-botones{
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  gap:16px;
+  margin-top:30px;
+}
+
+.modal-botones button{
+  min-width:160px;
+}
+
+.btn-secundario{
+  background:#2A3431;
+  color:#EEF1EC;
+  border:1px solid #4A5752;
+  padding:12px 24px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:600;
+  min-width:170px;
+  transition:.2s;
+}
+
+.btn-secundario:hover{
+  background:#36413E;
+}
+
+.btn-secundario:hover{
+  background:var(--card-hover);
+  border-color:var(--line-strong);
+}
+
+.alert{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+}
+
+.alert.error{
+  background:#7A1F2B !important;
+  color:#F8F4F4 !important;
+}
+
+.alert.success{
+  background:green !important;
+  color:white !important;
+}
+
+.btn-primario{
+  background:#6FBF8B;
+  color:#ffffff;
+  border:none;
+  padding:12px 24px;
+  border-radius:10px;
+  cursor:pointer;
+  font-size:15px;
+  font-weight:600;
+  min-width:170px;
+  transition:.2s;
+  box-shadow:0 4px 14px rgba(111,191,139,.35);
+}
+
+.btn-primario:hover{
+  background:#7fd79b;
+  box-shadow:0 8px 20px rgba(111,191,139,.45);
+  transform:translateY(-2px);
+}

@@ -1,0 +1,104 @@
+<div class="modal-overlay" *ngIf="mostrarModalPareja">
+
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <h3>Asignar cupo a pareja</h3>
+
+    <p class="modal-sub">
+      Selecciona una pareja para asignarle un cupo individual
+    </p>
+
+
+    <!-- Cliente titular -->
+    <div class="cliente-info">
+      {{ clienteLogueado?.primerNombre }}
+      {{ clienteLogueado?.primerApellido }}
+    </div>
+
+
+    <form (ngSubmit)="asignarCupoPareja()">
+
+
+      <!-- Selección pareja -->
+      <div class="campo">
+
+        <label>Pareja</label>
+
+        <select
+          [(ngModel)]="idParejaSeleccionada"
+          name="pareja">
+
+          <option [value]="0" disabled>
+            Seleccione una pareja
+          </option>
+
+          <option
+            *ngFor="let pareja of parejasCliente"
+            [value]="pareja.id">
+
+            {{ pareja.primerNombre }}
+            {{ pareja.primerApellido }}
+
+          </option>
+
+        </select>
+
+      </div>
+
+
+
+      <!-- Cupo -->
+      <div class="campo">
+
+        <label>Cupo asignado</label>
+
+        <input
+          type="number"
+          min="0"
+          [(ngModel)]="cupoAsignado"
+          name="cupoAsignado"
+          placeholder="Ingrese el cupo para la pareja">
+
+      </div>
+
+
+      <div *ngIf="message"
+           class="alert"
+           [class.success]="messageType === 'success'"
+           [class.error]="messageType === 'error'">
+
+        {{ message }}
+
+      </div>
+
+
+
+      <div class="modal-botones">
+
+        <button
+          type="button"
+          class="btn-secundario"
+          (click)="cerrarModalPareja()">
+
+          Cancelar
+
+        </button>
+
+
+        <button
+          type="submit"
+          class="btn-primario">
+
+          Asignar cupo
+
+        </button>
+
+      </div>
+
+
+    </form>
+
+
+  </div>
+
+</div>

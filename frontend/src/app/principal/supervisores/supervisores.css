@@ -1,0 +1,459 @@
+:host {
+  --bg:#0B1210;
+  --card:#141E1B;
+  --card-alt:#1A2521;
+  --line:rgba(238,241,236,0.09);
+  --text:#EEF1EC;
+  --text-soft:rgba(238,241,236,0.6);
+  --text-faint:rgba(238,241,236,0.4);
+  --brass:#C99A4A;
+  --brass-light:#D9B876;
+  --emerald:#6FBF8B;
+  --emerald-bg:rgba(111,191,139,0.15);
+  --rose:#D98BAE;
+  --rose-bg:rgba(217,139,174,0.15);
+
+  display:block;
+  font-family:'IBM Plex Sans', sans-serif;
+  color: var(--text);
+}
+
+/*Mensaje*/
+.alert {
+  position: relative;
+  padding: 10px 15px;
+  border-radius: 5px;
+  color: white;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  animation: fadeIn 0.3s ease;
+  text-align: center;
+  font-size: 14px;
+}
+
+.fade-out {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.success { background: #28a745; }
+.error { background: #dc3545; }
+
+@keyframes fadeIn {
+
+  from { opacity: 0; transform: translateY(-5px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.mono{
+  font-family:'IBM Plex Mono', monospace;
+}
+
+/* ---------------- Encabezado ---------------- */
+.encabezado{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  margin-bottom:28px;
+}
+
+.encabezado h1{
+  font-family:'Fraunces', serif;
+  font-size:30px;
+  font-weight:600;
+  margin:0;
+}
+
+.btn-registrar{
+  background: var(--brass) !important;
+  border: none !important;
+  color: #12241F !important;
+  font-weight: 600;
+  border-radius: 8px !important;
+  padding: 10px 18px !important;
+  font-size: 13.5px !important;
+}
+
+.btn-registrar:hover{
+  background: var(--brass-light) !important;
+}
+
+/* ---------------- Dashboard estadístico ---------------- */
+.dashboard{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+  margin-bottom:26px;
+}
+
+.tarjeta{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:22px;
+  text-align:center;
+}
+
+.tarjeta-titulo{
+  font-size:13.5px;
+  color:var(--text-soft);
+  margin-bottom:10px;
+  display:block;
+}
+
+.tarjeta-valor{
+  font-family:'Fraunces', serif;
+  font-size:28px;
+  font-weight:600;
+}
+
+.tarjeta-alerta{
+  background:rgba(201,154,74,0.08);
+  border-color:rgba(201,154,74,0.35);
+}
+
+.tarjeta-alerta .tarjeta-titulo,
+.tarjeta-alerta .tarjeta-valor{
+  color:var(--brass-light);
+}
+
+@media (max-width: 1100px){
+  .dashboard{ grid-template-columns:repeat(1,1fr); }
+}
+
+/* ---------------- Buscador ---------------- */
+.buscador{
+  position:relative;
+  margin-bottom:18px;
+  max-width: 420px;
+}
+
+.buscador i{
+  position:absolute;
+  left:12px;
+  top:50%;
+  transform:translateY(-50%);
+  color:var(--text-soft);
+  font-size: 13px;
+}
+
+.buscador input{
+  width:100%;
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:8px;
+  color:var(--text);
+  font-family:'IBM Plex Sans', sans-serif;
+  font-size:13.5px;
+  padding:9px 12px 9px 34px;
+}
+
+.buscador input::placeholder{
+  color:var(--text-faint);
+}
+
+.buscador input:focus{
+  outline:none;
+  border-color:var(--brass);
+}
+
+/* ---------------- Tabla (HTML nativa, igual al resto de la app) ---------------- */
+.table-card{
+  background:var(--card);
+  border:1px solid var(--line);
+  border-radius:14px;
+  overflow:hidden;
+}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+}
+
+thead th{
+  text-align:left;
+  font-size:13px;
+  font-weight:600;
+  color:var(--text-soft);
+  padding:16px 22px;
+  border-bottom:1px solid var(--line);
+}
+
+tbody td{
+  padding:14px 22px;
+  border-bottom:1px solid var(--line);
+  font-size:14px;
+  vertical-align: middle;
+}
+
+tbody tr:last-child td{
+  border-bottom:none;
+}
+
+tbody tr:hover{
+  background:rgba(238,241,236,0.02);
+}
+
+.cell-name{
+  font-weight:600;
+}
+
+.col-acciones {
+  text-align: right;
+  white-space: nowrap;
+}
+
+.empty-state{
+  text-align:center;
+  color:var(--text-soft);
+  padding:40px;
+  font-size:14px;
+}
+
+/* ---------------- Modal ---------------- */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(11, 18, 16, 0.65);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+}
+
+.modal {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 28px;
+  width: 450px;
+  max-width: 90%;
+}
+
+.modal-confirmacion {
+  width: 400px;
+}
+
+.modal h3 {
+  font-family: 'Fraunces', serif;
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  text-align: center;
+  margin-bottom: 26px;
+  margin-top: 8px;
+}
+
+.modal form {
+  display: flex;
+  flex-direction: column;
+}
+
+.modal label {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text-soft) !important;
+  margin: 12px 0 6px;
+}
+
+.modal input,
+.modal select {
+  width: 100%;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14px;
+  padding: 11px 13px;
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  margin-top: 4px;
+  margin-bottom: 6px;
+  transition: border-color .15s ease, box-shadow .15s ease;
+  box-sizing: border-box;
+}
+
+.modal input:focus,
+.modal select:focus {
+  outline: none;
+  border-color: var(--brass);
+  box-shadow: 0 0 0 3px rgba(201,154,74,0.15);
+}
+
+.fila-doble {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.fila-doble label {
+  margin-top: 10px;
+  color: var(--text-soft);
+}
+
+.error {
+  color: var(--rose);
+  font-size: 12.5px;
+  margin-top: 3px;
+  font-family: 'IBM Plex Sans', sans-serif;
+}
+
+.texto-confirmacion {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 14.5px;
+  color: var(--text-soft) !important;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.modal-botones {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.cancelar,
+.cancelarr {
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--rose);
+  border-radius: 8px;
+  border: 1px solid var(--rose-bg);
+  background: var(--rose-bg);
+  padding: 9px 16px;
+  cursor: pointer;
+  transition: opacity .15s ease;
+}
+
+.cancelar:hover,
+.cancelarr:hover {
+  opacity: 0.85;
+}
+
+@media (max-width: 1100px){
+  .tarjetas{ grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ---------------- Overrides para p-select (PrimeNG) ---------------- */
+/* PrimeNG no respeta variables CSS de :host por defecto, así que se
+   necesita ::ng-deep para que el select combine con el tema oscuro. */
+::ng-deep .dropdown-almacen .p-select-label{
+  color: var(--text) !important;
+  padding: 10px 12px !important;
+  font-size: 13.5px;
+}
+
+::ng-deep .dropdown-almacen{
+  background: var(--card-alt) !important;
+  border: 1px solid var(--line) !important;
+}
+
+::ng-deep .dropdown-almacen.p-focus{
+  border-color: var(--brass) !important;
+  box-shadow: 0 0 0 1px var(--brass) !important;
+}
+
+::ng-deep .p-select-overlay{
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+}
+
+::ng-deep .p-select-option{
+  font-size: 13.5px;
+}
+
+::ng-deep .p-select-option.p-select-option-selected{
+  background: var(--emerald-bg) !important;
+  color: var(--emerald) !important;
+}
+
+::ng-deep .p-select-option:not(.p-select-option-selected):hover{
+  background: rgba(238,241,236,0.05) !important;
+}
+
+/* ---------------- Modal de confirmación para eliminar (HTML propio) ---------------- */
+.overlay-confirmacion{
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.55);
+  backdrop-filter: blur(3px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal-confirmacion{
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 32px;
+  max-width: 420px;
+  width: 90%;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+}
+
+.modal-confirmacion h2{
+  font-family: 'Fraunces', serif;
+  font-size: 21px;
+  font-weight: 600;
+  color: var(--text);
+  margin: 0 0 12px;
+}
+
+.modal-confirmacion p{
+  color: var(--text-soft);
+  font-size: 14.5px;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.modal-confirmacion p strong{
+  color: var(--text);
+}
+
+.acciones-confirmacion{
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+.btn-cancelar-confirmacion{
+  background: var(--card-alt);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 9px;
+  padding: 10px 22px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-cancelar-confirmacion:hover{
+  border-color: var(--rose);
+  color: var(--rose);
+}
+
+.btn-eliminar-confirmacion{
+  background: var(--rose);
+  border: none;
+  color: #2A1420;
+  border-radius: 9px;
+  padding: 10px 22px;
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.btn-eliminar-confirmacion:hover{
+  background: var(--brass-light);
+  background: #E3A0C0;
+}

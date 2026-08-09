@@ -1,0 +1,109 @@
+<div class="login-page">
+
+  <!-- Panel izquierdo: formulario -->
+  <div class="login-form-panel">
+
+    <div class="brand">
+      <div class="logo-mark">N</div>
+      <div class="logo-word">NEXUS <span>Cupos</span></div>
+    </div>
+
+    <div class="form-head">
+      <div class="form-eyebrow">
+        Sistema interno · Uso exclusivo del personal y clientes registrados
+      </div>
+      <h1 class="form-title">Inicia Sesión</h1>
+    </div>
+
+    <form (ngSubmit)="onSubmit()"  class="login-form" novalidate>
+
+      <div class="field">
+        <label for="correo">Correo electrónico</label>
+
+        <input
+          id="correo"
+          type="text"
+          placeholder="tucorreo@ejemplo.com"
+          [(ngModel)]="usuario.correoElectronico"
+          name="correo">
+      </div>
+
+
+      <div class="field">
+        <label for="contrasena">Contraseña</label>
+
+        <div class="password-wrap">
+
+          <input
+            id="contrasena"
+            [type]="showPassword ? 'text' : 'password'"
+            placeholder="Tu contraseña"
+            [(ngModel)]="usuario.contrasenia"
+            name="contrasenia">
+
+        </div>
+      </div>
+      <!-- Mensaje de alerta -->
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+      <button type="submit" class="btn-submit">
+        Ingresar
+      </button>
+
+      <button type="button" class="btn-registrarse" (click)="irRegistro()">
+        Registrarse como titular
+      </button>
+
+    </form>
+
+  </div>
+
+  <!-- Panel derecho -->
+  <div class="login-side">
+
+    <div class="side-quote">
+      Bienvenido a <em>NEXUS Cupos</em>
+    </div>
+
+    <p class="side-sub">
+      Administra cuentas, cupos de crédito y compras de tus clientes desde una única plataforma. Inicia sesión para comenzar.
+    </p>
+
+    <div class="feature-list">
+
+      <div class="feature-item">
+        <div class="feature-icon">💳</div>
+        <div>
+          <div class="feature-title">Cupos individuales</div>
+          <div class="feature-desc">
+            Cada beneficiario con su propio límite de crédito.
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">🕒</div>
+        <div>
+          <div class="feature-title">Restricciones por horario</div>
+          <div class="feature-desc">
+            Bloqueo de compras por día y franja horaria.
+          </div>
+        </div>
+      </div>
+
+      <div class="feature-item">
+        <div class="feature-icon">🧾</div>
+        <div>
+          <div class="feature-title">Registro detallado</div>
+          <div class="feature-desc">
+            Monto, fecha, hora y almacén de cada compra.
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>

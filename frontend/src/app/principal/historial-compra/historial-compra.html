@@ -1,0 +1,140 @@
+<div class="historial-page">
+
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Historial de compras</h1>
+      <p class="page-sub">
+        Monto, fecha, hora y almacén de cada transacción registrada
+      </p>
+    </div>
+  </div>
+
+  <!-- Tarjetas de resumen -->
+  <div class="stats">
+
+    <div class="stat-card">
+      <div class="stat-label">Compras hoy</div>
+      <div class="stat-value">0</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Monto total hoy</div>
+      <div class="stat-value">$0</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-label">Compras bloqueadas hoy</div>
+      <div class="stat-value">0</div>
+    </div>
+
+    <div class="stat-card alert">
+      <div class="stat-label">Con sobrecupo aprobado</div>
+      <div class="stat-value">0</div>
+    </div>
+
+  </div>
+
+  <!-- Filtros -->
+  <div class="filters">
+
+    <div class="filter-field">
+      <label>Titular</label>
+      <select>
+        <option>Todos</option>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label>Pareja</label>
+      <select>
+        <option>Todas</option>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label>Almacén</label>
+      <select>
+        <option>Todos</option>
+      </select>
+    </div>
+
+    <div class="filter-field">
+      <label>Desde</label>
+      <input type="date">
+    </div>
+
+    <div class="filter-field">
+      <label>Hasta</label>
+      <input type="date">
+    </div>
+
+    <div class="filter-field">
+      <label>Estado</label>
+      <select>
+        <option>Todos</option>
+        <option>Aprobada</option>
+        <option>Bloqueada</option>
+        <option>Sobrecupo aprobado</option>
+      </select>
+    </div>
+
+    <button class="filter-clear">
+      Limpiar filtros
+    </button>
+
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-card">
+
+    <table>
+
+      <thead>
+      <tr>
+        <th>Fecha / Hora</th>
+        <th>Titular</th>
+        <th>Pareja</th>
+        <th>Almacén</th>
+        <th>Monto</th>
+        <th>Estado</th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr>
+        <td class="cell-fecha">
+          12/07/2026
+          <div class="cell-hora">10:30 AM</div>
+        </td>
+
+        <td class="cell-name">
+          Juan Pérez
+        </td>
+
+        <td>
+          María Gómez
+        </td>
+
+        <td class="cell-almacen">
+          📍 Almacén Centro
+        </td>
+
+        <td class="mono">
+          $350.000
+        </td>
+
+        <td>
+            <span class="badge">
+              Aprobada
+            </span>
+        </td>
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>

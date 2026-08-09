@@ -1,0 +1,226 @@
+<div class="header-clientes">
+  <h2 class="titulo">Clientes registrados</h2>
+  <button class="btn-primario" (click)="abrirModal()" *ngIf="rolUsuairo === 'ADMINISTRADOR'">
+    <i class="pi pi-plus"></i> Registrar cliente
+  </button>
+</div>
+
+<div class="tarjetas">
+  <div class="tarjeta">
+    <p class="tarjeta-label">Clientes registrados</p>
+    <p class="tarjeta-valor">{{clientesRegistrados}}</p>
+  </div>
+
+  <div class="tarjeta">
+    <p class="tarjeta-label">Parejas registradas</p>
+    <p class="tarjeta-valor">{{parejasRegistradas}}</p>
+  </div>
+
+  <div class="tarjeta">
+    <p class="tarjeta-label">Compras hoy</p>
+    <p class="tarjeta-valor">{{comprasHoy}}</p>
+  </div>
+
+  <div class="tarjeta tarjeta-alerta">
+    <p class="tarjeta-label">Sobrecupos pendientes</p>
+    <p class="tarjeta-valor">{{sobrecuposPendientes}}</p>
+  </div>
+</div>
+
+<div class="tabla-contenedor">
+  <table>
+    <thead>
+    <tr>
+      <th>Titular</th>
+      <th>Correo</th>
+      <th>Cupo total</th>
+      <th>Estado</th>
+      <th></th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr *ngFor="let cliente of clientes">
+      <td>{{ cliente.primerNombre }} {{ cliente.primerApellido }}</td>
+      <td class="col-correo">{{ cliente.correoElectronico }}</td>
+      <td>{{ cliente.cupoTotal | currency:'COP':'symbol':'1.0-0' }}</td>
+      <td>
+          <span class="badge">
+            Activo
+          </span>
+      </td>
+      <td class="col-acciones">
+        <button
+          class="btn-icono"
+          title="Editar"
+          (click)="editar(cliente)">
+          <i class="fas fa-pencil-alt"></i>
+        </button>
+
+        <button
+          class="btn-icono btn-icono-peligro"
+          title="Eliminar"
+          (click)="eliminar(cliente)">
+          <i class="fas fa-trash"></i>
+        </button>
+      </td>
+    </tr>
+
+    <tr *ngIf="!cargando && clientes.length === 0">
+      <td colspan="5" style="text-align: center;">
+        No hay clientes registrados.
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModal"
+  (click)="cerrarModal()">
+
+  <div
+    class="modal"
+    (click)="$event.stopPropagation()">
+
+    <h3>{{ modoEdicion ? 'Editar cliente' : 'Registrar cliente' }}</h3>
+
+    <form (ngSubmit)="onSignUp()">
+
+      <div class="fila-doble">
+        <div>
+          <label>Primer nombre</label>
+          <input
+            type="text"
+            placeholder="Primer nombre"
+            name = "primerNombre"
+            [(ngModel)]="cliente.primerNombre">
+        </div>
+
+        <div>
+          <label>Segundo nombre</label>
+          <input
+            type="text"
+            placeholder="Segundo nombre"
+            name = "segundoNombre"
+            [(ngModel)]="cliente.segundoNombre">
+        </div>
+      </div>
+
+      <div class="fila-doble">
+        <div>
+          <label>Primer apellido</label>
+          <input
+            type="text"
+            placeholder="Primer apellido"
+            name = "primerApellido"
+            [(ngModel)]="cliente.primerApellido">
+        </div>
+
+        <div>
+          <label>Segundo apellido</label>
+          <input
+            type="text"
+            placeholder="Segundo apellido"
+            name = "segundoApellido"
+            [(ngModel)]="cliente.segundoApellido">
+        </div>
+      </div>
+
+      <label>Correo electrónico</label>
+      <input
+        type="email"
+        placeholder="correo@ejemplo.com"
+        name = "correoElectronico"
+        [(ngModel)]="cliente.correoElectronico">
+
+      <label>Numero de Documento</label>
+      <input
+        type="email"
+        placeholder="1033099779"
+        name = "numeroDocumento"
+        [(ngModel)]="cliente.numeroDocumento">
+
+      <label>Cupo total</label>
+      <input
+        type="number"
+        placeholder="0"
+        name = "cupoTotal"
+        [(ngModel)]="cliente.cupoTotal">
+
+      <label>Contraseña</label>
+      <input
+        type="password"
+        placeholder="Contraseña"
+        name = "contrasenia"
+        [(ngModel)]="cliente.contrasenia">
+
+      <label>Confirmar contraseña</label>
+      <input
+        type="password"
+        placeholder="Confirme su Contraseña"
+        name = "confirmPassword"
+        [(ngModel)]="confirmPassword">
+
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+      <div class="modal-botones">
+
+        <button
+          type="button"
+          class="cancelar"
+          (click)="cerrarModal()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primario">
+          {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+<!-- Modal confirmar eliminación -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModalEliminar"
+  (click)="cerrarModalEliminar()">
+
+  <div
+    class="modal modal-confirmacion"
+    (click)="$event.stopPropagation()">
+
+    <h3>Eliminar cliente</h3>
+
+    <p class="texto-confirmacion">
+      ¿Seguro que quieres eliminar a
+      <strong>{{ clienteAEliminar?.primerNombre }} {{ clienteAEliminar?.primerApellido }}</strong>?
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="modal-botones">
+
+      <button type="button" class="cancelarr" (click)="cerrarModalEliminar()">
+        Cancelar
+      </button>
+
+      <button type="button" class="btn-peligro" (click)="confirmarEliminar()">
+        Eliminar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+

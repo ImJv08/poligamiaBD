@@ -1,0 +1,60 @@
+<div class="modal-overlay" *ngIf="mostrarModalCupo">
+
+  <div class="modal" (click)="$event.stopPropagation()">
+
+    <h3>Asignar cupo total</h3>
+
+    <p class="modal-sub">
+      Cliente titular
+    </p>
+
+    <div class="cliente-info">
+      {{ clienteLogueado?.primerNombre }}
+      {{ clienteLogueado?.primerApellido }}
+    </div>
+
+    <form (ngSubmit)="asignarCupoTotal()">
+
+      <div class="campo">
+
+        <label>Cupo total</label>
+
+        <input
+          type="number"
+          min="0"
+          [(ngModel)]="cupoTotal"
+          name="cupoTotal"
+          placeholder="Ingrese el cupo">
+
+      </div>
+
+      <div
+        class="alert"
+        *ngIf="message"
+        [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+
+      <div class="modal-botones">
+
+        <button
+          type="button"
+          class="btn-secundario"
+          (click)="cerrarModalCupo()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primario">
+          Asignar cupo
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>

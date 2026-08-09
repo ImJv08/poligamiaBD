@@ -1,0 +1,278 @@
+
+
+<div *ngIf="!mostrarDesglose">
+  <div class="cupos-page">
+
+
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Gestión de Cupos</h1>
+        <p class="page-sub">
+          Cupo total, asignado y disponible por cada cliente titular
+        </p>
+      </div>
+    </div>
+
+    <div class="stats">
+
+      <div class="stat-card">
+        <div class="stat-label">
+          Cupo disponible de todos los cliente
+        </div>
+
+        <div class="stat-value">
+          {{ totalCupos }}
+        </div>
+      </div>
+
+      <div class="stat-card">
+        <div class="stat-label">
+          Cupo disponible de todas las parejas
+        </div>
+
+        <div class="stat-value">
+          {{ totalCuposParejas }}
+        </div>
+      </div>
+
+
+
+    </div>
+
+    <div class="table-card">
+
+      <table>
+
+        <thead>
+
+        <tr>
+          <th>Titular</th>
+          <th>Cupo disponible</th>
+          <th>Asignado a parejas</th>
+          <th></th>
+        </tr>
+
+        </thead>
+
+        <tbody>
+        <tr *ngFor="let cliente of clienteMostrar">
+
+          <td>
+            <div class="cell-name">
+              {{cliente.nombre}} {{cliente.apellido}}
+            </div>
+            <div class="cell-muted">
+              {{cliente.cantidadParejas}} pareja(s) registrada(s)
+            </div>
+          </td>
+          <td class="mono">
+            {{cliente.cupoTotal}}
+          </td>
+          <td class="mono">
+            {{cliente.cupoAsignado}}
+          </td>
+          <td class="cell-action">
+            <button class="btn btn-outline" (click)="verDesglose(cliente)">
+              Ver desglose →
+            </button>
+          </td>
+        </tr>
+
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+</div>
+
+<div *ngIf="mostrarDesglose">
+  <div class="cupos-page">
+
+    <a class="back-link" (click)="volver()">
+      ← Volver a Gestión de Cupos
+    </a>
+
+    <div class="page-header">
+
+      <div>
+
+        <h1 class="page-title">
+          <h1>{{cliente.primerNombre}} {{cliente.primerApellido}}</h1>
+        </h1>
+
+        <p class="page-sub">
+          {{cliente.correoElectronico}} · Cliente titular
+        </p>
+
+      </div>
+
+    </div>
+
+    <div class="ledger-layout">
+
+      <div class="ledger-card">
+
+        <div class="ledger-head">
+
+          <div>
+
+            <div class="ledger-label">
+              Cupo
+            </div>
+
+            <div class="ledger-total mono">
+              {{cliente.cupoTotal}}
+            </div>
+
+          </div>
+
+          <div class="ledger-badge">
+            {{totalPareja}} pareja(s)
+          </div>
+
+        </div>
+
+        <div class="alloc-bar">
+
+          <div
+            class="seg seg-0"
+            [style.width.%]="porcentajeAsignado()">
+          </div>
+
+          <div
+            class="seg seg-1"
+            [style.width.%]="porcentajeDisponible()">
+          </div>
+
+
+        </div>
+
+        <div class="alloc-legend">
+
+        <span>
+Asignado: {{asignado | number}}
+          ({{porcentajeAsignado() | number:'1.0-0'}}%)
+</span>
+
+          <span>
+Disponible: {{disponible | number}}
+</span>
+
+        </div>
+
+        <div class="pareja-row" *ngFor="let pareja of parejas">
+
+          <div class="pareja-left">
+
+            <div class="pareja-avatar">
+              {{pareja.primerNombre.charAt(0)}}
+            </div>
+
+            <div>
+
+              <div class="pareja-name">
+                {{pareja.primerNombre}} {{pareja.primerApellido}}
+              </div>
+
+              <div class="pareja-doc">
+                {{pareja.numeroDocumento}}
+              </div>
+
+            </div>
+
+          </div>
+
+          <div class="pareja-right">
+
+    <span class="badge badge-ok">
+      Activa
+    </span>
+
+            <span class="pareja-cupo mono">
+      {{pareja.cupoAsignado}}
+    </span>
+
+          </div>
+
+        </div>
+
+          </div>
+
+          <div>
+
+            <div class="info-card">
+
+              <div class="info-title">
+                Resumen del titular
+              </div>
+
+              <div class="info-row">
+
+                <span class="k">
+                  Estado de la cuenta
+                </span>
+
+                <span class="v">
+                  <span class="badge badge-ok">
+                    Activo
+                  </span>
+                </span>
+
+              </div>
+
+              <div class="info-row">
+
+                <span class="k">
+                  Fecha de registro
+                </span>
+
+                <span class="v">
+                  {{cliente.fechaRegistro}}
+                </span>
+
+              </div>
+
+            </div>
+
+            <div class="info-card">
+
+              <div class="info-title">
+                Restricciones activas
+              </div>
+
+              <div class="info-row" *ngFor="let r of restricciones">
+
+                <div class="info-row" *ngFor="let r of restricciones">
+
+  <span class="k">
+    {{ obtenerPareja(r.parejaId)?.primerNombre }}
+    {{ obtenerPareja(r.parejaId)?.primerApellido }}
+  </span>
+
+                  <span class="v">
+    <span class="badge" [ngClass]="r.activa ? 'badge-block' : 'badge-ok'">
+      {{ r.activa ? 'Activa' : 'Inactiva' }}
+    </span>
+  </span>
+
+                </div>
+
+              </div>
+
+
+
+          </div>
+
+        </div>
+    </div>
+
+
+
+
+
+
+      </div>
+
+  </div>

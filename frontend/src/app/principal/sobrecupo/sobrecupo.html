@@ -1,0 +1,190 @@
+<div class="header-clientes">
+  <h2>Sobrecupos</h2>
+  <p class="subtitulo">
+    Cuando una pareja agota su cupo, el punto de venta genera una solicitud aquí.
+    Solo puedes aprobarla si el cliente titular autorizó el sobrecupo desde su cuenta.
+  </p>
+</div>
+
+<div class="tarjetas">
+  <div class="tarjeta tarjeta-alerta">
+    <p class="tarjeta-label">Pendientes de aprobación</p>
+    <p class="tarjeta-valor"> {{ pendientes }}</p>
+  </div>
+
+  <div class="tarjeta">
+    <p class="tarjeta-label">Total Aprobados</p>
+    <p class="tarjeta-valor">{{ aprobados }}</p>
+  </div>
+
+  <div class="tarjeta">
+    <p class="tarjeta-label">Monto Total Aprobado</p>
+    <p class="tarjeta-valor">
+      {{ montoAprobado | currency:'COP':'symbol':'1.0-0' }}
+    </p>
+  </div>
+</div>
+
+<div class="tabla-contenedor">
+  <table>
+    <thead>
+    <tr>
+      <th>Pareja</th>
+      <th>Almacén</th>
+      <th>Monto solicitado</th>
+      <th>Autorización titular</th>
+      <th>Estado</th>
+      <th *ngIf="rolUsuario === 'SUPERVISOR' || rolUsuario === 'CLIENTE'">Acciones</th>
+    </tr>
+    </thead>
+
+    <tbody>
+
+    <tr *ngFor="let sobrecuposs of sobrecupos">
+
+      <td>{{ nombrePareja(sobrecuposs.idCompra) }}</td>
+
+      <td>{{ nombreAlmacen(sobrecuposs.idCompra) }}</td>
+
+      <td>
+        {{ montoCompra(sobrecuposs.idCompra) | currency:'COP':'symbol':'1.0-0' }}
+      </td>
+
+      <td>
+        <span
+          class="badge"
+          [ngClass]="sobrecuposs.autorizadoCliente === null ? 'badge-pendiente' :
+                     sobrecuposs.autorizadoCliente ? 'badge-activo' : 'badge-suspendido'">
+          {{ sobrecuposs.autorizadoCliente === null ? 'Pendiente' :
+          sobrecuposs.autorizadoCliente ? 'Autorizado' : 'Rechazado' }}
+        </span>
+      </td>
+
+      <td>
+        <span
+          class="badge"
+          [ngClass]="sobrecuposs.aprobadoSupervisor === null ? 'badge-pendiente' :
+                     sobrecuposs.aprobadoSupervisor ? 'badge-activo' : 'badge-suspendido'">
+          {{ sobrecuposs.aprobadoSupervisor === null ? 'Pendiente' :
+          sobrecuposs.aprobadoSupervisor ? 'Aprobado' : 'Rechazado' }}
+        </span>
+      </td>
+
+      <td class="col-acciones">
+
+
+
+
+        <div *ngIf="rolUsuario === 'CLIENTE'">
+
+          <ng-container *ngIf="sobrecuposs.autorizadoCliente == null">
+
+            <button
+              class="btn btn-success"
+              (click)="autorizar(sobrecuposs)" class="badge badge-activo">
+              Autorizar
+            </button>
+
+
+            <button
+              class="btn btn-danger"
+              (click)="denegar(sobrecuposs)" class="badge badge-suspendido">
+              Rechazar
+            </button>
+
+          </ng-container>
+
+          <ng-container *ngIf="sobrecuposs.autorizadoCliente != null">
+
+      <span class="texto-final">
+        Ya fue respondido.
+
+      </span>
+
+
+            <span
+              *ngIf="sobrecuposs.autorizadoCliente === true"
+              class="badge badge-activo">
+        Autorizado
+      </span>
+
+
+            <span
+              *ngIf="sobrecuposs.autorizadoCliente === false"
+              class="badge badge-suspendido">
+        Rechazado
+      </span>
+
+          </ng-container>
+
+
+        </div>
+
+
+
+        <div *ngIf="rolUsuario === 'SUPERVISOR'">
+
+          <span *ngIf="sobrecuposs.autorizadoCliente == null">
+      Esperando autorización del cliente.
+    </span>
+
+
+
+
+          <span *ngIf="sobrecuposs.autorizadoCliente === false"
+                class="texto-final">
+
+      El cliente rechazó la solicitud.
+
+    </span>
+
+
+
+          <ng-container
+            *ngIf="
+      sobrecuposs.autorizadoCliente === true &&
+      sobrecuposs.aprobadoSupervisor == null
+      ">
+
+
+            <button
+              class="btn btn-success"
+              (click)="aprobar(sobrecuposs)" class="badge badge-activo">
+              Aprobar
+            </button>
+
+
+            <button
+              class="btn btn-danger"
+              (click)="cancelar(sobrecuposs)" class="badge badge-suspendido">
+              Rechazar
+            </button>
+
+
+          </ng-container>
+
+          <span *ngIf="sobrecuposs.aprobadoSupervisor != null"
+                class="texto-final">
+
+      Ya fue respondido por el supervisor.
+
+    </span>
+
+
+
+        </div>
+
+
+      </td>
+    </tr>
+
+    <tr *ngIf="!cargando && sobrecupos.length === 0">
+      <td colspan="7" class="sin-datos">
+        No hay solicitudes de sobrecupo.
+      </td>
+    </tr>
+
+    </tbody>
+  </table>
+</div>
+

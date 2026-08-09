@@ -1,0 +1,238 @@
+
+
+<div class="supervisores-container">
+
+  <!-- Encabezado -->
+  <div class="encabezado">
+    <h1>Supervisores</h1>
+    <button pButton type="button" class="btn-registrar" (click)="abrirModal()">
+      <i class="pi pi-plus" pButtonIcon></i>
+      <span pButtonLabel>Registrar supervisor</span>
+    </button>
+  </div>
+
+  <div class="dashboard">
+    <div class="tarjeta">
+      <span class="tarjeta-titulo">Supervisores registrados</span>
+      <span class="tarjeta-valor">{{supervisoresRegistrados}}</span>
+    </div>
+  </div>
+
+  <!-- Tabla -->
+  <div class="tabla-wrapper">
+
+    <div class="buscador">
+      <i class="pi pi-search"></i>
+
+      <input
+        type="text"
+        placeholder="Buscar por nombre, documento o almacén"
+        [(ngModel)]="filtro"
+        (input)="filtrarSuperviores()">
+    </div>
+
+    <div class="table-card">
+      <table>
+        <thead>
+        <tr>
+          <th>Supervisor</th>
+          <th>Documento</th>
+          <th>Correo</th>
+          <th>Almacén</th>
+          <th class="col-acciones">Acciones</th>
+        </tr>
+        </thead>
+
+        <tbody>
+
+        <tr *ngFor="let supervisor of supervisores">
+
+          <td class="cell-name">{{ supervisor.primerNombre }} {{ supervisor.primerApellido }}</td>
+
+          <td class="mono">{{ supervisor.numeroDocumento }}</td>
+
+          <td>{{ supervisor.correoElectronico }}</td>
+
+          <td>{{ supervisor.almacen?.nombre }}</td>
+
+          <td class="col-acciones">
+            <button class="btn-icono" title="Editar" (click)="editar(supervisor)">
+              <i class="fas fa-pencil-alt"></i>
+            </button>
+            <button class="btn-icono btn-icono-peligro" title="Eliminar" (click)="eliminar(supervisor)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </td>
+
+        </tr>
+
+        <tr *ngIf="!cargando && supervisores.length === 0">
+          <td colspan="5" class="empty-state">
+            No se encontraron supervisores con ese criterio.
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal registrar / editar -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModal"
+  (click)="cerrarModal()">
+
+  <div
+    class="modal"
+    (click)="$event.stopPropagation()">
+
+    <h3>{{ modoEdicion ? 'Editar supervisor' : 'Registrar supervisor' }}</h3>
+
+    <form (ngSubmit)="onSignUp()">
+
+      <div class="fila-doble">
+        <div>
+          <label>Primer nombre</label>
+          <input
+            type="text"
+            placeholder="Primer nombre"
+            name = "primerNombre"
+            [(ngModel)]="supervisor.primerNombre">
+        </div>
+
+        <div>
+          <label>Segundo nombre</label>
+          <input
+            type="text"
+            placeholder="Segundo nombre"
+            name = "segundoNombre"
+            [(ngModel)]="supervisor.segundoNombre">
+        </div>
+      </div>
+
+      <div class="fila-doble">
+        <div>
+          <label>Primer apellido</label>
+          <input
+            type="text"
+            placeholder="Primer apellido"
+            name = "primerApellido"
+            [(ngModel)]="supervisor.primerApellido">
+        </div>
+
+        <div>
+          <label>Segundo apellido</label>
+          <input
+            type="text"
+            placeholder="Segundo apellido"
+            name = "segundoApellido"
+            [(ngModel)]="supervisor.segundoApellido">
+        </div>
+      </div>
+
+      <label>Correo electrónico</label>
+      <input
+        type="email"
+        placeholder="correo@ejemplo.com"
+        name = "correoElectronico"
+        [(ngModel)]="supervisor.correoElectronico">
+
+      <label>Numero de Documento</label>
+      <input
+        type="email"
+        placeholder="1033099779"
+        name = "numeroDocumento"
+        [(ngModel)]="supervisor.numeroDocumento">
+
+      <label>Almacén</label>
+      <select
+        name="almacen"
+        [(ngModel)]="supervisor.almacen">
+        <option [ngValue]="null" disabled>Seleccione un almacén</option>
+        <option *ngFor="let alm of almacenes" [ngValue]="alm">
+          {{ alm.nombre }} — {{ alm.barrio }}, {{ alm.ciudad }}
+        </option>
+      </select>
+
+      <label>Contraseña</label>
+      <input
+        type="password"
+        placeholder="Contraseña"
+        name = "contrasenia"
+        [(ngModel)]="supervisor.contrasenia">
+
+      <label>Confirmar contraseña</label>
+      <input
+        type="password"
+        placeholder="Confirme su Contraseña"
+        name = "confirmPassword"
+        [(ngModel)]="confirmPassword">
+
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+      <div class="modal-botones">
+
+        <button
+          type="button"
+          class="cancelar"
+          (click)="cerrarModal()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primario">
+          {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- Modal de confirmación para eliminar -->
+<!--
+<div class="overlay-confirmacion">
+
+  <div class="modal-confirmacion">
+
+    <h2>Eliminar supervisor</h2>
+
+    <p>
+      ¿Seguro que quieres eliminar a
+      <strong></strong>?
+      El almacén <strong></strong> quedará sin supervisor.
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="acciones-confirmacion">
+
+      <button
+        type="button"
+        class="btn-cancelar-confirmacion">
+
+        Cancelar
+
+      </button>
+
+      <button
+        type="button"
+        class="btn-eliminar-confirmacion">
+
+        Eliminar
+
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+-->

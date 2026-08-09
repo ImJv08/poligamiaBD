@@ -1,0 +1,73 @@
+<div class="layout">
+  <aside class="sidebar">
+
+    <div class="logo">
+      <div class="logo-icon">N</div>
+      <div class="logo-text">
+        NEXUS<br>
+        <span>Cupos</span>
+      </div>
+    </div>
+
+    <nav>
+      <a [routerLink]="['/pagina-principal/clientes']" *ngIf="tieneAcceso(['SUPERVISOR', 'ADMINISTRADOR'])">
+        <i class="pi pi-users"></i> Clientes
+      </a>
+
+      <a [routerLink]="['/pagina-principal/cupos']" *ngIf="tieneAcceso(['SUPERVISOR', 'ADMINISTRADOR'])">
+        <i class="pi pi-credit-card"></i> Cupos
+      </a>
+
+      <a [routerLink]="['/pagina-principal/restriccion']" *ngIf="tieneAcceso(['CLIENTE', 'ADMINISTRADOR', 'PAREJA'])">
+        <i class="pi pi-times-circle"></i> Restricciones
+      </a>
+
+      <a [routerLink]="['/pagina-principal/sobrecupo']" *ngIf="tieneAcceso(['CLIENTE', 'SUPERVISOR', 'ADMINISTRADOR'])">
+        <i class="pi pi-verified"></i> Sobrecupos
+      </a>
+
+      <a [routerLink]="['/pagina-principal/almacenes']" *ngIf="tieneAcceso(['ADMINISTRADOR'])">
+        <i class="pi pi-building"></i> Almacenes
+      </a>
+
+      <a [routerLink]="['/pagina-principal/supervisores']" *ngIf="tieneAcceso(['ADMINISTRADOR'])">
+        <i class="pi pi-users"></i> Supervisores
+      </a>
+
+      <a [routerLink]="['/pagina-principal/parejas']" *ngIf="tieneAcceso(['CLIENTE', 'ADMINISTRADOR'])">
+        <i class="pi pi-id-card"></i> Parejas
+      </a>
+
+      <a [routerLink]="['/pagina-principal/compras']" *ngIf="tieneAcceso(['PAREJA', 'ADMINISTRADOR', 'CLIENTE'])">
+        <i class="pi pi-id-card"></i> Compras
+      </a>
+      <a [routerLink]="['/pagina-principal/anadirCupo']"
+         *ngIf="tieneAcceso(['CLIENTE'])">
+        <i class="pi pi-credit-card"></i> Asignar mi cupo
+      </a>
+      <a [routerLink]="['/pagina-principal/asignarCupoPareja']"
+         *ngIf="tieneAcceso(['CLIENTE'])">
+        <i class="pi pi-users"></i> Asignar cupo a pareja
+      </a>
+
+      <a [routerLink]="['/']"
+         *ngIf="tieneAcceso(['CLIENTE', 'PAREJA', 'ADMINISTRADOR', 'SUPERVISOR'])">
+        <i class="pi pi-user"></i> Cerrar sesión
+      </a>
+    </nav>
+
+    <div class="usuario">
+      <div class="avatar" *ngIf="rolUsuario === 'CLIENTE' || rolUsuario === 'SUPERVISOR' || rolUsuario === 'PAREJA'">{{cliente.primerNombre.charAt(0)}}{{cliente.primerApellido.charAt(0)}}</div>
+      <span>{{cliente.primerNombre}} {{cliente.primerApellido}}</span>
+
+      <button class="btn-salir" title="Cerrar sesión">
+        <i class="pi pi-sign-out"></i>
+      </button>
+    </div>
+
+  </aside>
+
+  <main class="contenido">
+    <router-outlet></router-outlet>
+  </main>
+</div>

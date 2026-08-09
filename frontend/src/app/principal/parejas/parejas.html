@@ -1,0 +1,253 @@
+<div class="pareja-container">
+
+  <div class="pareja-header">
+    <h2>Parejas</h2>
+
+    <button class="btn-gold" (click) = "abrirModal()">
+      + Nueva pareja
+    </button>
+  </div>
+
+  <!-- Dashboard -->
+  <div class="dashboard">
+
+    <div class="tarjeta">
+      <span class="tarjeta-titulo">Parejas registradas</span>
+      <span class="tarjeta-valor">{{parejasRegistradas}}</span>
+    </div>
+
+    <div class="tarjeta">
+      <span class="tarjeta-titulo">Cupo total asignado</span>
+      <span class="tarjeta-valor">${{totalCuposParejas}}</span>
+    </div>
+
+  </div>
+
+  <!-- Buscador -->
+  <div class="toolbar">
+
+    <div class="buscador">
+      <i class="pi pi-search"></i>
+
+
+      <input
+        type="text"
+        placeholder="Buscar por nombre o cédula..."
+        [(ngModel)]="filtro"
+        (input)="filtrarParejas()">
+
+    </div>
+
+    <div class="filtro-row">
+      <label>Cliente:</label>
+
+      <select>
+        <option>Todos los clientes</option>
+      </select>
+    </div>
+
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-wrapper">
+
+    <table class="tabla-parejas">
+
+      <thead>
+      <tr>
+        <th>Nombre completo</th>
+        <th>Cédula</th>
+        <th>Correo</th>
+        <th>Cliente titular</th>
+        <th>Cupo asignado</th>
+        <th></th>
+      </tr>
+      </thead>
+
+      <tbody>
+
+      <tr *ngFor="let pareja of parejas">
+        <td class="cell-name">{{ pareja.primerNombre }} {{ pareja.primerApellido }}</td>
+        <td>{{ pareja.numeroDocumento }}</td>
+        <td>{{ pareja.correoElectronico }}</td>
+        <td>
+          {{ obtenerCliente(pareja.idCliente)?.primerNombre }}
+          {{ obtenerCliente(pareja.idCliente)?.primerApellido }}
+        </td>
+        <td>{{ pareja.cupoAsignado | currency:'COP':'symbol':'1.0-0' }}</td>
+        <td class="col-acciones">
+          <button
+            class="btn-icono"
+            title="Editar"
+            (click)="editar(pareja)">
+            <i class="fas fa-pencil-alt"></i>
+          </button>
+
+          <button
+            class="btn-icono btn-icono-peligro"
+            title="Eliminar"
+            (click)="eliminar(pareja)">
+            <i class="fas fa-trash"></i>
+          </button>
+        </td>
+      </tr>
+
+      <tr *ngIf="!cargando && parejas.length === 0">
+        <td colspan="5" style="text-align: center;">No hay parejas registradas.</td>
+      </tr>
+
+      </tbody>
+
+    </table>
+
+  </div>
+
+</div>
+
+<!-- Modal -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModal"
+  (click)="cerrarModal()">
+
+  <div
+    class="modal"
+    (click)="$event.stopPropagation()">
+
+    <h3>{{ modoEdicion ? 'Editar pareja' : 'Registrar pareja' }}</h3>
+
+    <form (ngSubmit)="onSignUp()">
+
+      <div class="fila-doble">
+        <div>
+          <label>Primer nombre</label>
+          <input
+            type="text"
+            placeholder="Primer nombre"
+            name = "primerNombre"
+            [(ngModel)]="pareja.primerNombre">
+        </div>
+
+        <div>
+          <label>Segundo nombre</label>
+          <input
+            type="text"
+            placeholder="Segundo nombre"
+            name = "segundoNombre"
+            [(ngModel)]="pareja.segundoNombre">
+        </div>
+      </div>
+
+      <div class="fila-doble">
+        <div>
+          <label>Primer apellido</label>
+          <input
+            type="text"
+            placeholder="Primer apellido"
+            name = "primerApellido"
+            [(ngModel)]="pareja.primerApellido">
+        </div>
+
+        <div>
+          <label>Segundo apellido</label>
+          <input
+            type="text"
+            placeholder="Segundo apellido"
+            name = "segundoApellido"
+            [(ngModel)]="pareja.segundoApellido">
+        </div>
+      </div>
+
+      <label>Correo electrónico</label>
+      <input
+        type="email"
+        placeholder="correo@ejemplo.com"
+        name = "correoElectronico"
+        [(ngModel)]="pareja.correoElectronico">
+
+      <label>Numero de Documento</label>
+      <input
+        type="email"
+        placeholder="1033099779"
+        name = "numeroDocumento"
+        [(ngModel)]="pareja.numeroDocumento">
+
+      <label>Cupo asignado</label>
+      <input
+        type="number"
+        placeholder="0"
+        name = "cupoTotal"
+        [(ngModel)]="pareja.cupoAsignado">
+
+      <div *ngIf="rolUsuario === 'ADMINISTRADOR'">
+        <label>Seleccione el cliente</label>
+        <select name="idCliente" [(ngModel)]="pareja.idCliente">
+          <option [ngValue]="0" disabled>Seleccione un cliente</option>
+          <option *ngFor="let c of clientes" [ngValue]="c.id">
+            {{ c.primerNombre }} {{ c.primerApellido }} — {{ c.correoElectronico }}
+          </option>
+        </select>
+      </div>
+
+      <div class="alert" *ngIf="message" [ngClass]="messageType">
+        {{ message }}
+      </div>
+
+      <div class="modal-botones">
+
+        <button
+          type="button"
+          class="cancelar"
+          (click)="cerrarModal()">
+          Cancelar
+        </button>
+
+        <button
+          type="submit"
+          class="btn-primario">
+          {{ modoEdicion ? 'Actualizar' : 'Guardar' }}
+        </button>
+
+      </div>
+
+    </form>
+
+  </div>
+
+</div>
+
+<!-- Modal confirmar eliminación -->
+<div
+  class="modal-overlay"
+  *ngIf="mostrarModalEliminar"
+  (click)="cerrarModalEliminar()">
+
+  <div
+    class="modal modal-confirmacion"
+    (click)="$event.stopPropagation()">
+
+    <h3>Eliminar cliente</h3>
+
+    <p class="texto-confirmacion">
+      ¿Seguro que quieres eliminar a
+      <strong>{{parejaAEliminar?.primerNombre }} {{parejaAEliminar?.primerApellido }}</strong>?
+      Esta acción no se puede deshacer.
+    </p>
+
+    <div class="modal-botones">
+
+      <button type="button" class="cancelarr" (click)="cerrarModalEliminar()">
+        Cancelar
+      </button>
+
+      <button type="button" class="btn-peligro" (click)="confirmarEliminar()">
+        Eliminar
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
